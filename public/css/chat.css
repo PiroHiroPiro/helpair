@@ -1,0 +1,77 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+.ChatUI {
+    display: flex;
+    height: 100vh;
+}
+.HelperList {
+    width: 300px
+}
+.Helper {
+    display: flex;
+}
+.Helper.select {
+    background: #eee
+}
+
+.ChatUI-popup {
+    background: rgba(0, 0, 0, .5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.ChatSpase {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+    width: 400px;
+    max-width: 100%;
+    height: 500px;
+    max-height: 100%;
+    flex: 1;
+    background: #fff;
+}
+.ChatSpase-massages {
+    flex: 1;
+    overflow: scroll;
+}
+.Massage {
+    display: flex;
+    align-items: flex-start;
+    margin: 1em 0;
+}
+.Massage.self{
+    flex-direction: row-reverse
+}
+.Massage-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    margin-left: 12px;
+    background-position: center;
+    background-size: cover;
+}
+.Massage-text {
+    flex-direction: row;
+    max-width: 60%;
+    padding: .2em .5em;
+    margin: 0 16px;
+    border: 1px solid #eee;
+    border-radius: 1em;
+}
+.MessageInput-textarea {
+    width: calc(100% - 20px);
+    padding: 4px 12px;
+    margin: 0 10px;
+    box-sizing: border-box;
+    resize: none;
+}

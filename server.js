@@ -1,77 +1,154 @@
-/**
- * This file provided by Facebook is for non-commercial testing and evaluation
- * purposes only. Facebook reserves all rights not expressly granted.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
- * FACEBOOK BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
- * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+'use strict'
 
+var mime = require('mime');
 var fs = require('fs');
 var path = require('path');
-var express = require('express');
-var bodyParser = require('body-parser');
-var app = express();
+var port = process.env.PORT || 3000;
+var app = require('http').createServer(function (req, res) {
+    var url = 'public' + req.url.replace(/\/$/, '/index.html');
 
-var COMMENTS_FILE = path.join(__dirname, 'comments.json');
+    console.log('> ' + url);
 
-app.set('port', (process.env.PORT || 3000));
+    fs.readFile(url, function (err, data) {
+        if (err) {
+            res.writeHead(500);
+            res.end('Error');
+            return;
+        }
 
-app.use('/', express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-
-// Additional middleware which will set headers that we need on each request.
-app.use(function(req, res, next) {
-    // Set permissive CORS header - this allows this server to be used only as
-    // an API server in conjunction with something like webpack-dev-server.
-    res.setHeader('Access-Control-Allow-Origin', '*');
-
-    // Disable caching so we'll always get the latest comments.
-    res.setHeader('Cache-Control', 'no-cache');
-    next();
+        res.writeHead(200, {
+            'Content-Type': mime.lookup(url)
+        });
+        res.end(data);
+    })
 });
 
-app.get('/api/comments', function(req, res) {
-  fs.readFile(COMMENTS_FILE, function(err, data) {
-    if (err) {
-      console.error(err);
-      process.exit(1);
-    }
-    res.json(JSON.parse(data));
-  });
-});
+app.listen(port);
+console.log('Server running at http://localhost:' + port + '/');
 
-app.post('/api/comments', function(req, res) {
-  fs.readFile(COMMENTS_FILE, function(err, data) {
-    if (err) {
-      console.error(err);
-      process.exit(1);
+var chatData = {
+    '123456 2': [
+        { userId: 2, massage: 'ヘルパーの発言', id: 1 },
+        { userId: 123456, massage: 'ユーザーの発言', id: 2 },
+        { userId: 2, massage: 'ヘルパーの発言', id: 3 },
+        { userId: 123456, massage: 'ユーザーの発言', id: 4 },
+        { userId: 123456, massage: 'ユーザーの発言', id: 5 },
+    ],
+    '123456 323456': [
+        { userId: 123456, massage: 'ユーザーの発言', id: 1 },
+        { userId: 323456, massage: 'ヘルパーの発言ヘルパーの発言ヘルパーの発言ヘルパーの発言ヘルパーの発言ヘルパーの発言', id: 2 },
+        { userId: 123456, massage: 'ユーザーの発言ユーザーの発言ユーザーの発言ユーザーの発言ユーザーの発言', id: 3 },
+        { userId: 323456, massage: 'ヘルパーの発言ヘルパーの発言ヘルパーの発言', id: 4 },
+        { userId: 123456, massage: 'ユーザーの発言', id: 5 },
+    ]
+}
+// 会員情報
+var dataBase = {
+    123456: {
+        name: 'login_id',
+        imageUrl: 'img/image2.jpg',
+        lastLogs: [
+            {
+                userId: 2,
+                lastLog: { massage: 'ユーザーの発言', id: 5 }
+            }, {
+                userId: 323456,
+                lastLog: { massage: 'ユーザーの発言ユーザーの発言', id: 5 }
+            }
+        ]
+    },
+    2: {
+        name: 'スティーブ',
+        imageUrl: 'img/images.jpg',
+        lastLogs: [
+            {
+                userId: 123456,
+                lastLog: { massage: 'ユーザーの発言', id: 5 }
+            }
+        ]
+    },
+    323456: {
+        name: 'ジョブス',
+        imageUrl: 'img/image2.jpg',
+        lastLogs: [
+            {
+                userId: 123456,
+                lastLog: { massage: 'ユーザーの発言ユーザーの発言', id: 5 }
+            }
+        ]
     }
-    var comments = JSON.parse(data);
-    // NOTE: In a real implementation, we would likely rely on a database or
-    // some other approach (e.g. UUIDs) to ensure a globally unique id. We'll
-    // treat Date.now() as unique-enough for our purposes.
-    var newComment = {
-      id: Date.now(),
-      author: req.body.author,
-      text: req.body.text,
-    };
-    comments.push(newComment);
-    fs.writeFile(COMMENTS_FILE, JSON.stringify(comments, null, 4), function(err) {
-      if (err) {
-        console.error(err);
-        process.exit(1);
-      }
-      res.json(comments);
+};
+function getUserData(id) {
+    return {
+        userId: id,
+        name: dataBase[id].name,
+        imageUrl: dataBase[id].imageUrl
+    }
+}
+
+var io = require('socket.io').listen(app);
+var member = {};
+var userIds = {};
+var store = {};
+
+io.sockets.on('connection', function (socket) {
+    member[socket.id] = socket;
+
+    function login(id) {
+        userIds[id] = socket.id;
+
+        socket.emit('logined', {
+            userId: id,
+            user: getUserData(id),
+            chat: dataBase[id].lastLogs.map(function (chat) {
+                return {
+                    user: getUserData(chat.userId),
+                    lastLog: chat.lastLog,
+                }
+            }),
+        });
+    }
+
+    socket.on('login', login);
+    socket.on('joinChatRoom', function (ids) {
+        socket.emit('joinChatRoom', {
+            id: ids[1],
+            data: getRoomData(ids).map(function (massage) {
+                massage.user = massage.user || getUserData(massage.userId);
+
+                return massage;
+            })
+        });
     });
-  });
+
+    socket.on('send', function (data) {
+        var room = getRoomData([data.massageFrom, data.to]);
+        // var newId = room[room.length - 1].id + 1
+        var newId = Date.now()
+
+        var massage = {
+            id: newId,
+            user: getUserData(data.massageFrom),
+            massage: data.text
+        }
+
+        room.push(massage);
+        console.log('#', userIds[data.to], data.text)
+        if (userIds[data.to]) {
+            socket.to(userIds[data.to]).emit('send', massage);
+        }
+    });
+
+    socket.on('chat', function (msg) {
+        io.to(store[msg.id].room).emit('chat', msg);
+    });
+
+    socket.on('disconnect', function (socket) {
+        member[socket.id] = null;
+        delete member[socket.id];
+    });
 });
 
-
-app.listen(app.get('port'), function() {
-  console.log('Server started: http://localhost:' + app.get('port') + '/');
-});
+function getRoomData(ids) {
+    return chatData[ids.sort().join(' ')];
+}
