@@ -299,7 +299,7 @@ a.logo {
     height: 160px;
     width: 564px;
     margin: 12px 0px;
-    border: 0.5px solid #DFE3EB;
+    /*border: 0.5px solid #DFE3EB;*/
 }
 
 .helper-item:nth-child(2n+1) {
@@ -308,19 +308,21 @@ a.logo {
     width: 564px;
     margin: 12px 0px;
     margin-right: 32px;
-    border: 0.5px solid #DFE3EB;
+    /*border: 0.5px solid #DFE3EB;*/
 }
 
 .helper-item img {
-    width: 160px;
-    height: 160px;
+    width: 120px;
+    height: 120px;
     float: left;
+    border: 1px solid #DFE3EB;
+    border-radius: 100%;
 }
 
 .helper-item p.name {
     font-size: 18px;
     line-height: 20px;
-    margin: 23px 0px;
+    margin-bottom: 23px;
     margin-left: 198px;
     color: #000000;
 }
@@ -328,7 +330,7 @@ a.logo {
 .helper-item p.text {
     font-size: 13px;
     line-height: 1.5;
-    margin-left: 194px;
+    margin-left: 160px;
     margin-right: 19px;
     color: #6A6A6A;
 }

@@ -317,15 +317,15 @@ flex-grow: 10;
 
 #review .poster {
     text-align: center;
-    width: 221px;
+    width: 200px;
 }
 
 #review .firstItem {
-    /*    width: 500px;*/
-    width: 800px;
+        width: 500px;
+    /*width: 800px;*/
     display: flex;
     flex-direction: column;
-    padding-bottom: 42px;
+    /*padding-bottom: 42px;*/
 }
 
 #review .review-content {
@@ -406,4 +406,18 @@ flex-grow: 10;
 }
 .HelperList {
     display: none
+}
+
+.left-container {
+    width: 200px;
+
+}
+.right-container {
+    width: 500px;
+}
+.firstItem {
+    width: 250px;
+}
+.secondItem {
+    width: 250px;
 }
