@@ -1,0 +1,377 @@
+/* fontのdownload */
+
+@font-face {
+    font-family: 'mplus-2m-regular';
+    src: url('http://mplus-webfonts.sourceforge.jp/mplus-2m-regular.eot');
+    src: url('http://mplus-webfonts.sourceforge.jp/mplus-2m-regular.eot?#iefix') format('embedded-opentype'), url('http://mplus-webfonts.sourceforge.jp/mplus-2m-regular.woff') format('woff'), url('http://mplus-webfonts.sourceforge.jp/mplus-2m-regular.ttf') format('truetype');
+}
+
+
+/* 全てのmargin, paddingを0に */
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.inner li {
+    padding-right: 66px;
+}
+
+h1 li {
+    margin-right: 50px;
+}
+
+h1 a:link {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+a:active {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+body {
+    font-family: mplus-1c-regular;
+    min-width: 1164px;
+}
+
+.inner {
+    margin: 0 auto;
+    padding: 5px 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+/* 以下header部分 */
+
+.header {
+    position: relative;
+    width: 100%;
+}
+
+
+/* 以下nav部分 */
+
+.nav {
+    position: fixed;
+    width: 100%;
+    height: 60px;
+    z-index: 1;
+    background: #FFFFFF;
+    box-shadow: 0px 1px 0px 0px #DFE3EB;
+}
+
+.nav h {
+    color: #46CDC8;
+    margin-left: 47px;
+    font-size: 36px;
+}
+
+.nav ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav li {
+    margin: 10px;
+    list-style: none;
+    display: inline-block;
+    font-size: 15px;
+    line-height: 17px;
+}
+
+.nav a {
+    color: #767676;
+    text-decoration: none;
+}
+
+a.logo {
+    color: #46CDC8;
+}
+
+.nav p {
+    font-size: 15px;
+}
+
+
+/* 以下containers部分*/
+
+.containers {
+    margin: 0px auto;
+    width: 1164px;
+    min-height: calc(100vh - 61px);
+}
+
+
+/* 以下sub-container1部分*/
+
+.sub-container1 {
+    padding-top: 118px;
+    height: 147px;
+}
+
+.sub-container1 h3 {
+    height: 25px;
+}
+
+
+/* 以下tag部分 */
+
+.tags {
+    width: 55%;
+    float: left;
+}
+
+.tags h3 {
+    font-size: 18px;
+    line-height: 20px;
+    padding-bottom: 10px;
+}
+
+.tags li {
+    height: 15px;
+    line-height: 15px;
+    padding: 4px 12px;
+    border: 1px solid #DFE3EB;
+    border-radius: 100px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 14px;
+    list-style-type: none;
+    font-size: 13px;
+}
+
+
+/* 以下button部分 */
+
+.buttons {
+    float: right;
+    width: 35%;
+}
+
+.button-item {
+    float: right;
+    width: 59px;
+    height: 85px;
+    margin-left: 50px;
+}
+
+.button-item li {
+    list-style-type: none;
+    width: 59px;
+    height: 59px;
+    text-align: center;
+    margin-bottom: 10px;
+    padding-top: 0px;
+}
+
+.button-item.button-img {
+    width: 59px;
+    height: 59px;
+}
+
+.button-item i:not(.pink) {
+    width: 59px;
+    height: 59px;
+    border: 1px splid #F0F1F1;
+    border-radius: 30px;
+    background: #F0F1F1;
+    color: #000000;
+    font-size: 30px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-item i.pink {
+    width: 59px;
+    height: 59px;
+    border: 1px splid #FF8C8C;
+    border-radius: 30px;
+    background: #FF8C8C;
+    color: #FFFFFF;
+    font-size: 30px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-item:not(.circle) {
+    line-height: 11px;
+    font-size: 11px;
+    text-align: center;
+}
+
+
+/*
+.button-item #inquiry {
+    background-image: url(image/inquiry_icon.svg);
+    background-position: center;
+    background-size: cover;
+    display: inline-block;
+    width: 59px;
+    height: 59px;
+}
+
+.button-item #request {
+    background-image: url(image/request_icon.svg);
+    background-position: center;
+    background-size: cover;
+    display: inline-block;
+    width: 59px;
+    height: 59px;
+}
+
+.button-item #emergent {
+    background-image: url(image/emergent_icon.svg);
+    background-position: center;
+    background-size: cover;
+    display: inline-block;
+    width: 59px;
+    height: 59px;
+}*/
+
+
+/*
+.button-item.circle:not(.pink) {
+    height: 60px;
+    width: 60px;
+    border: 1px splid #FF8C8C;
+    border-radius: 30px;
+    background: #FF8C8C;
+    color: #FFFFFF;
+}
+
+.button-item.circle.pink {
+    height: 60px;
+    width: 60px;
+    border: 1px splid #F0F1F1;
+    border-radius: 30px;
+    background: #F0F1F1;
+    color: #000000;
+}*/
+
+
+/* 以下sub-container2部分*/
+
+.sub-container2 {
+    clear: both;
+    border-bottom: 1px solid #DFE3EB;
+    margin-top: 51px;
+    padding-bottom: 13px;
+}
+
+.sub-container2.address {
+    float: left;
+}
+
+.sub-container2 ul {
+    float: right;
+}
+
+.sub-container2 li {
+    float: left;
+    padding-left: 33px;
+    list-style-type: none;
+    font-size: 16px;
+    letter-spacing: 0.13px;
+}
+
+
+/* 以下sub-container3部分 */
+
+.sub-container3 {
+    clear: both;
+    padding-top: 13px;
+}
+
+
+/* 以下mentor部分 */
+
+.helper-item:nth-child(2n) {
+    float: left;
+    height: 160px;
+    width: 564px;
+    margin: 12px 0px;
+    border: 0.5px solid #DFE3EB;
+}
+
+.helper-item:nth-child(2n+1) {
+    float: left;
+    height: 160px;
+    width: 564px;
+    margin: 12px 0px;
+    margin-right: 32px;
+    border: 0.5px solid #DFE3EB;
+}
+
+.helper-item img {
+    width: 160px;
+    height: 160px;
+    float: left;
+}
+
+.helper-item p.name {
+    font-size: 18px;
+    line-height: 20px;
+    margin: 23px 0px;
+    margin-left: 198px;
+    color: #000000;
+}
+
+.helper-item p.text {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-left: 194px;
+    margin-right: 19px;
+    color: #6A6A6A;
+}
+
+
+/* 以下footer部分 */
+
+.footer {
+    background-color: #46CDC8;
+    clear: both;
+    height: 61px;
+    margin-top: 36px;
+    margin: 36 0;
+}
+
+.footer-item {
+    width: 33%;
+    float: left;
+    text-align: center;
+}
+
+.footer-item h3,
+.footer-item p,
+.footer-item a {
+    color: #fff;
+}
+
+.copyright {
+    display: block;
+    padding: 20px;
+    background-color: #46CDC8;
+    color: #fff;
+    clear: both;
+    text-align: center;
+}

@@ -5,41 +5,62 @@ import {MassageData, UserData} from './sampleData';
 
 export namespace MessageInput {
     export interface Props extends React.Props<MessageInput> {
-        socket: SocketIOClient.Socket;
-        opponentId: number;
-        selfId: number;
+        sendMassageEvent: (text: string) => any;
+
     }
     export interface State {
-        text: string;
+        inputText?: string;
+        inputHeight?: number;
     }
 }
 
 export class MessageInput extends React.Component<MessageInput.Props, MessageInput.State> {
     constructor() {
         super();
-        this.state = { text: '' };
+        this.state = { inputText: '' };
 
         this.changeEvent = this.changeEvent.bind(this);
         this.keyDownEvent = this.keyDownEvent.bind(this);
+        this.setInputHeight = this.setInputHeight.bind(this);
     }
     changeEvent(e: KeyboardEvent) {
-        this.setState({ text: (e.target as HTMLInputElement).value });
+        const textarea = e.target as HTMLTextAreaElement
+        this.setState({
+            inputText: textarea.value
+        });
+        this.setInputHeight();
+    }
+    setInputHeight() {
+        const textarea = this.refs['nameInput'] as HTMLTextAreaElement;
+        
+        if (Math.abs(textarea.scrollHeight - this.state.inputHeight) < 1) return;
+
+        this.setState({
+            inputHeight: textarea.scrollHeight
+        });
+        requestAnimationFrame(this.setInputHeight);
     }
     keyDownEvent(e: KeyboardEvent) {
+        this.setInputHeight();
+
         if (e.keyCode === 13 && !e.shiftKey) {
             e.preventDefault();
-            console.log('enter', this.props.opponentId, this.props.selfId)
 
-            this.props.socket.emit('send', {
-                to: this.props.opponentId,
-                massageFrom: this.props.selfId,
-                text: this.state.text
-            })
-            this.setState({ text: '' });
+            const text = this.state.inputText.trim();
+
+            if (text === '') return;
+
+            this.props.sendMassageEvent(text);
+
+            this.setState({
+                inputText: ''
+            });
+
+            requestAnimationFrame(this.setInputHeight);
         }
     }
     componentDidMount() {
-        (this.refs['nameInput'] as any).focus();
+        (this.refs['nameInput'] as HTMLTextAreaElement).focus();
     }
     render() {
         return (
@@ -48,9 +69,12 @@ export class MessageInput extends React.Component<MessageInput.Props, MessageInp
                     ref="nameInput"
                     className="MessageInput-textarea"
                     rows="1"
-                    value={this.state.text}
+                    value={this.state.inputText}
                     onChange={this.changeEvent}
                     onKeyDown={this.keyDownEvent}
+                    style={{
+                        height: this.state.inputHeight
+                    }}
                     placeholder="Say something..."
                     />
             </div>

@@ -28,19 +28,18 @@ console.log('Server running at http://localhost:' + port + '/');
 
 var chatData = {
     '123456 2': [
-        { userId: 2, massage: 'ヘルパーの発言', id: 1 },
-        { userId: 123456, massage: 'ユーザーの発言', id: 2 },
-        { userId: 2, massage: 'ヘルパーの発言', id: 3 },
-        { userId: 123456, massage: 'ユーザーの発言', id: 4 },
-        { userId: 123456, massage: 'ユーザーの発言', id: 5 },
+        { userId: 2, massage: 'ヘルパーの発言', id: 1, date: 1474140000000 },
+        { userId: 123456, massage: 'ユーザーの発言', id: 2, date: 1474145000000 },
+        { userId: 2, massage: 'ヘルパーの発言', id: 3, date: 1474145800000 },
+        { userId: 123456, massage: 'ユーザーの発言', id: 4, date: 147414589000 },
+        { userId: 123456, massage: 'ユーザーの発言', id: 5, date: 1474145896357 },
     ],
     '123456 323456': [
-        { userId: 123456, massage: 'ユーザーの発言', id: 1 },
-        { userId: 323456, massage: 'ヘルパーの発言ヘルパーの発言ヘルパーの発言ヘルパーの発言ヘルパーの発言ヘルパーの発言', id: 2 },
-        { userId: 123456, massage: 'ユーザーの発言ユーザーの発言ユーザーの発言ユーザーの発言ユーザーの発言', id: 3 },
-        { userId: 323456, massage: 'ヘルパーの発言ヘルパーの発言ヘルパーの発言', id: 4 },
-        { userId: 123456, massage: 'ユーザーの発言', id: 5 },
+        { userId: 123456, massage: 'ユーザーの発言', id: 1, date: 1474140000000 }
     ]
+}
+function getLastLog(ids) {
+    return getRoomData(ids).slice().reverse()[0];
 }
 // 会員情報
 var dataBase = {
@@ -50,32 +49,28 @@ var dataBase = {
         lastLogs: [
             {
                 userId: 2,
-                lastLog: { massage: 'ユーザーの発言', id: 5 }
+                notCheck: 0
             }, {
                 userId: 323456,
-                lastLog: { massage: 'ユーザーの発言ユーザーの発言', id: 5 }
+                notCheck: 0
             }
         ]
     },
     2: {
         name: 'スティーブ',
         imageUrl: 'img/images.jpg',
-        lastLogs: [
-            {
-                userId: 123456,
-                lastLog: { massage: 'ユーザーの発言', id: 5 }
-            }
-        ]
+        lastLogs: [{
+            userId: 123456,
+            notCheck: 0
+        }]
     },
     323456: {
         name: 'ジョブス',
         imageUrl: 'img/image2.jpg',
-        lastLogs: [
-            {
-                userId: 123456,
-                lastLog: { massage: 'ユーザーの発言ユーザーの発言', id: 5 }
-            }
-        ]
+        lastLogs: [{
+            userId: 123456,
+            notCheck: 0
+        }]
     }
 };
 function getUserData(id) {
@@ -87,30 +82,34 @@ function getUserData(id) {
 }
 
 var io = require('socket.io').listen(app);
-var member = {};
 var userIds = {};
 var store = {};
 
 io.sockets.on('connection', function (socket) {
-    member[socket.id] = socket;
-
-    function login(id) {
+    socket.on('getHelperListData', function (id) {
+        if (typeof id !== 'number') {
+            if (id[1] != null) getLastLogFromDataBase(id[0], id[1]).notCheck = 0;
+            id = id[0];
+        }
         userIds[id] = socket.id;
 
         socket.emit('logined', {
             userId: id,
             user: getUserData(id),
-            chat: dataBase[id].lastLogs.map(function (chat) {
+            chat: dataBase[id].lastLogs.map(function (data) {
                 return {
-                    user: getUserData(chat.userId),
-                    lastLog: chat.lastLog,
-                }
-            }),
+                    user: getUserData(data.userId),
+                    lastLog: getLastLog([id, data.userId]),
+                    notCheck: data.notCheck
+                };
+            }).sort(function (a, b) {
+                return b.lastLog.date - a.lastLog.date;
+            })
         });
-    }
-
-    socket.on('login', login);
+    });
     socket.on('joinChatRoom', function (ids) {
+        getLastLogFromDataBase(ids[1], ids[0]).notCheck = 0;
+
         socket.emit('joinChatRoom', {
             id: ids[1],
             data: getRoomData(ids).map(function (massage) {
@@ -123,17 +122,21 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('send', function (data) {
         var room = getRoomData([data.massageFrom, data.to]);
-        // var newId = room[room.length - 1].id + 1
-        var newId = Date.now()
+        var last = room[room.length - 1];
+        var newId = last ? last.id + 1 : 0;
+        // var newId = Date.now()
 
         var massage = {
             id: newId,
             user: getUserData(data.massageFrom),
-            massage: data.text
+            massage: data.text,
+            date: Date.now()
         }
 
         room.push(massage);
-        console.log('#', userIds[data.to], data.text)
+
+        getLastLogFromDataBase(data.to, data.massageFrom).notCheck++
+
         if (userIds[data.to]) {
             socket.to(userIds[data.to]).emit('send', massage);
         }
@@ -144,11 +147,29 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('disconnect', function (socket) {
-        member[socket.id] = null;
-        delete member[socket.id];
     });
 });
 
 function getRoomData(ids) {
     return chatData[ids.sort().join(' ')];
+}
+
+function getLastLogFromDataBase(selfId, opponentId) {
+    var lastLogs = dataBase[selfId].lastLogs;
+    var lastLog = lastLogs.filter(function (v) {
+        return v.userId === opponentId;
+    });
+
+    if (!lastLog) {
+        lastLog = {
+            userId: opponentId,
+            notCheck: 0
+        };
+
+        lastLogs.push(lastLog);
+
+        return lastLog;
+    }
+
+    return lastLog[0];
 }

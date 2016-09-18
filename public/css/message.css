@@ -1,0 +1,179 @@
+.new-icon-wapper {
+    position: relative;
+}
+#new-icon {
+    position: absolute;
+    top: -.5em;
+    right: -1.5em;
+    display: inline-block;
+    border-radius: 100px;
+    line-height: 16px;
+    text-align: center;
+    background: red;
+    color: #fff;
+    opacity: 0;
+
+    font-size: 10px;
+    width: 1.5em;
+    height: 1.5em;
+    line-height: 1.5em;
+    font-weight: bold;
+}
+#new-icon.new-icon-on {
+    opacity: 1;
+}
+body {
+    min-width: 754px;
+}
+.containers {
+    /*617 + 60 + 77*/
+    width: 754px;
+min-height: calc(100vh - 206px);
+    margin: auto;
+    padding-top: 109px;
+}
+.Helper {
+    display: flex;
+    padding: 16px 0;
+    border-bottom: 1px solid #DFE3EB;
+}
+.Helper:hover {
+    /*background-color: #eee;*/
+}
+.Helper.select {
+    background: #eee;
+}
+.Helper-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    margin: 0 12px;
+    background-position: center;
+    background-size: cover;
+}
+.Helper-name {
+    font-family: mplus-2c-regular;
+    font-size: 16px;
+    color: #4A4A4A;
+    letter-spacing: 0.13px;
+}
+.Helper-colms {
+    display: flex;
+    justify-content: space-between;
+    /*500 + 97 + 77*/
+    width: 674px;
+}
+.Helper-lastLog {
+    width: 500px;
+    font-family: 'mplus-2c-regular';
+    font-size: 12px;
+    color: #4A4A4A;
+    letter-spacing: 0.56px;
+
+    line-height: 17px;
+    margin: 9px 0 7px;
+    overflow: hidden;
+    height: 51px;
+}
+.Helper-reply {
+    width: 77px;
+    height: 26px;
+    border-radius: 6px;
+    line-height: 26px;
+    text-align: center;
+    background: #3FACA8;
+    font-family: mplus-2c-medium;
+    font-size: 12px;
+    color: #FFFFFF;
+    letter-spacing: 0.56px;
+    cursor: pointer;
+}
+.Helper-date{
+    font-family: mplus-2c-regular;
+    font-size: 12px;
+    color: #8D9095;
+    letter-spacing: 0.56px;
+}
+.Helper-unread {
+    font-family: mplus-2c-medium;
+    font-size: 12px;
+    color: #9E4B4B;
+    letter-spacing: 0.56px;
+}
+.ChatUI-popup {
+    background: rgba(0, 0, 0, .5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+}
+.ChatSpase {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+    width: 400px;
+    max-width: 100%;
+    height: 500px;
+    max-height: 100%;
+    flex: 1;
+    background: #fff;
+}
+.ChatSpase-massages {
+    flex: 1;
+    overflow: scroll;
+}
+.Massage {
+    display: flex;
+    align-items: flex-start;
+    margin: 1em 0;
+}
+.Massage.self{
+    flex-direction: row-reverse
+}
+.Massage.self .Massage-text{
+    background: #46CDC8;
+color: #fff;
+}
+.Massage-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    margin-left: 12px;
+    background-position: center;
+    background-size: cover;
+}
+.Massage-text {
+    flex-direction: row;
+    max-width: 60%;
+    padding: .2em .5em;
+    margin: 0 16px;
+    border: 1px solid #eee;
+    border-radius: 1em;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+.MessageInput-textarea {
+    width: calc(100% - 20px);
+    max-height: 100px;
+    padding: 4px 12px;
+    margin: 0 10px;
+    font-size: 1em;
+    box-sizing: border-box;
+    resize: none;
+}
+.ChatSpase-opponent-name {
+    line-height: 40px;
+    padding: 0 12px;
+    border-bottom: 1px solid #bbb;
+}
+.ChatSpase-close {
+    font-weight: normal;
+    float: right;
+}

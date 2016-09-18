@@ -11,16 +11,17 @@ export namespace ChatUI {
     }
     export interface State {
         data?: ChatData;
-        selectId?: number;
-        userId?: number
+        opponent?: UserData;
+        user?: UserData;
         chat?: MassageData[];
         users?: { [userId: number]: UserData };
+        inputText?: '';
     }
 }
 
 export class ChatUI extends React.Component<ChatUI.Props, ChatUI.State> {
     socket = io.connect();
-    chat: {
+    chats: {
         [userId: number]: MassageData[]
     } = {};
 
@@ -32,25 +33,64 @@ export class ChatUI extends React.Component<ChatUI.Props, ChatUI.State> {
                 user: null,
                 chat: []
             },
-            selectId: null,
-            userId: +window.location.hash.substring(1) || 123456,
-            chat: [],
-            users: {}
+            opponent: { userId: null, name: null },
+            user: { userId: +window.location.hash.substring(1) || 123456, name: null },
+            users: {},
+            chat: []
         };
 
         this.socket.on('logined', this.setLoginData.bind(this))
         this.socket.on('joinChatRoom', this.setChatData.bind(this))
-        this.socket.on('send', this.chatch.bind(this))
+        this.socket.on('send', this.chatchMassage.bind(this))
 
-        this.socket.emit('login', this.state.userId);
+        this.socket.emit('getHelperListData', this.state.user.userId);
 
+        // bind
         this.selectHelper = this.selectHelper.bind(this);
+        this.sendMassageEvent = this.sendMassageEvent.bind(this);
+        this.uiCloseEvent = this.uiCloseEvent.bind(this);
+
+        const jsLink = document.getElementById('js-link');
+        if (jsLink) {
+            jsLink.addEventListener('click', e => {
+                e.preventDefault();
+
+                this.setState({
+                    opponent: { userId: 2, name: "スティーブ" }
+                })
+            })
+        }
     }
-    chatch(data: any) {
-        this.state.chat.push(data)
-        this.setState({
-            chat: this.state.chat
+    sendMassageEvent(text: string) {
+        this.socket.emit('send', {
+            to: this.state.opponent.userId,
+            massageFrom: this.state.user.userId,
+            text: text
         });
+
+        this.setState({
+            inputText: '',
+            chat: this.state.chat.concat({
+                id: Date.now(),
+                user: this.state.data.user,
+                massage: text
+            })
+        });
+
+        this.socket.emit('getHelperListData', this.state.user.userId);
+    }
+    chatchMassage(data: MassageData) {
+        this.socket.emit('getHelperListData', [this.state.user.userId, this.state.opponent.userId]);
+
+        if (this.state.opponent.userId === data.user.userId) {
+            this.state.chat.push(data)
+            // this.state.data.chat
+            this.setState({
+                chat: this.state.chat
+            });
+        }
+
+        console.log(data);
     }
     setLoginData(data: ChatData) {
         const users: { [userId: number]: UserData } = {};
@@ -60,36 +100,49 @@ export class ChatUI extends React.Component<ChatUI.Props, ChatUI.State> {
         });
 
         this.setState({
-            userId: data.userId,
-            selectId: null,
+            user: data.user,
+            // opponent: { userId: null, name: null },
             data, users
-        })
+        });
 
-        console.log(this.state.userId, this.state.selectId)
+        console.log(this.state.user.userId, this.state.opponent.userId)
     }
     selectHelper(id: number) {
-        // console.log(this.state.selectId, this.state.chat)
         // if (!this.chat[id]) {
-        this.chat[id] = [];
-        this.socket.emit('joinChatRoom', [id, this.state.userId]);
+        this.chats[id] = [];
+        this.socket.emit('joinChatRoom', [id, this.state.user.userId]);
         // }
 
+        console.log(this.state.user, id)
         this.setState({
-            selectId: id,
-            chat: this.chat[id]
+            opponent: this.state.users[id],
+            chat: this.chats[id]
         });
-        console.log(this.state.userId, this.state.selectId)
+
+        this.socket.emit('getHelperListData', this.state.user.userId);
     }
     setChatData(data: { id: number, data: MassageData[] }) {
-        // console.log(data.data);
-        this.chat[data.id] = data.data;
+        this.chats[data.id] = data.data;
 
         this.setState({
             chat: data.data
         })
     }
+    uiCloseEvent() {
+        this.setState({ opponent: { userId: null, name: null } })
+    }
     render() {
-        const selectHelper = this.state.data.chat.filter(chat => chat.user.userId === this.state.selectId)[0]
+        const count = this.state.data.chat.reduce((sum, chat) => sum + chat.notCheck, 0);
+        const icon = document.getElementById('new-icon');
+
+        if (count) {
+            icon.classList.add('new-icon-on')
+            icon.textContent = count as any;
+        } else {
+            icon.classList.remove('new-icon-on')
+        }
+
+        document.body.style.overflow = this.state.opponent.userId ? 'hidden' : null;
 
         return (
             <div className="ChatUI">
@@ -99,16 +152,18 @@ export class ChatUI extends React.Component<ChatUI.Props, ChatUI.State> {
                     selectHelper={this.selectHelper}
                     />
                 {
-                    this.state.selectId ? <div
+                    this.state.opponent.userId ? <div
                         className="ChatUI-popup"
                         onClick={(e) => {
-                            if ((e.target as HTMLElement).className === "ChatUI-popup") this.setState({selectId: null})
+                            if ((e.target as HTMLElement).className === "ChatUI-popup") this.uiCloseEvent()
                         } }>
                         <ChatSpase
-                            socket={this.socket}
                             massages={this.state.chat || []}
-                            selfId={this.state.userId}
-                            opponentId={this.state.selectId}
+                            user={this.state.user}
+                            opponent={this.state.opponent}
+                            inputText={this.state.inputText}
+                            sendMassageEvent={this.sendMassageEvent}
+                            uiCloseEvent={this.uiCloseEvent}
                             />
                     </div> : null
                 }

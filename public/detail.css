@@ -1,0 +1,409 @@
+/* fontのdownload */
+
+@font-face {
+    font-family: 'mplus-2m-regular';
+    src: url('http://mplus-webfonts.sourceforge.jp/mplus-2m-regular.eot');
+    src: url('http://mplus-webfonts.sourceforge.jp/mplus-2m-regular.eot?#iefix') format('embedded-opentype'), url('http://mplus-webfonts.sourceforge.jp/mplus-2m-regular.woff') format('woff'), url('http://mplus-webfonts.sourceforge.jp/mplus-2m-regular.ttf') format('truetype');
+}
+
+
+/* 全てのmargin, paddingを0に */
+
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+h1 a:link {
+    color: #FFFFFF;
+    text-decoration: none
+}
+
+a:visited {
+    color: #FFFFFF;
+    text-decoration: none
+}
+
+a:hover {
+    color: #FFFFFF;
+    text-decoration: none
+}
+
+a:active {
+    color: #FFFFFF;
+    text-decoration: none
+}
+
+body {
+    font-family: mplus-1c-regular;
+    min-width: 1164px;
+}
+
+.inner {
+    margin: 0 auto;
+    padding: 5px 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.inner li {
+    padding-right: 66px;
+}
+
+
+/* 以下header部分 */
+
+.header {
+    position: relative;
+    width: 100%;
+}
+
+
+/* 以下nav部分 */
+
+.nav {
+    position: fixed;
+    width: 100%;
+    height: 60px;
+    z-index: 1;
+    background: #FFFFFF;
+    box-shadow: 0px 1px 0px 0px #DFE3EB;
+}
+
+.nav h {
+    color: #46CDC8;
+    margin-left: 47px;
+    font-size: 36px;
+}
+
+.nav ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav li {
+    margin: 10px;
+    list-style: none;
+    display: inline-block;
+    font-size: 15px;
+    line-height: 17px;
+}
+
+.nav a {
+    color: #767676;
+    text-decoration: none;
+}
+
+a.logo {
+    color: #46CDC8;
+}
+
+.nav p {
+    font-size: 15px;
+}
+
+
+/* 以下containers部分*/
+
+.containers {
+    margin: 0px auto;
+    padding-top: 101px;
+    width: 1164px;
+    min-height: calc(100vh - 61px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+
+/* 以下container部分*/
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    /*    text-align: center;*/
+    height: 320px;
+}
+
+.container p {
+    font-size: 14px;
+    letter-spacing: 0.11px;
+}
+
+.container li {
+    list-style: none;
+}
+
+.sec-title {
+    width: 218px;
+    /*        width: 150px;*/
+    font-size: 20px;
+    color: #4A4A4A;
+    /*        letter-spacing: 0.16px;*/
+}
+
+.firstItem {
+    /*                width: 290px;*/
+    width: 400px;
+}
+
+.list {
+    display: flex;
+    flex-direction: row;
+}
+
+
+/* 以下introduce部分*/
+
+#introduce {
+    display: flex;
+    /*    justify-content: space-around;*/
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #CFCDCD;
+}
+
+#introduce #text {
+    width: 570px;
+    /*    margin-left: 88px;*/
+}
+
+#introduce #text #title {
+    font-family: HiraKakuProN-W3;
+    font-size: 28px;
+    color: #46CDC8;
+    letter-spacing: 0.23px;
+    line-height: 39px;
+    margin-bottom: 14px;
+}
+
+#introduce #text #body {
+    font-family: HiraKakuProN-W3;
+    font-size: 14px;
+    color: #2F3030;
+    letter-spacing: 0.11px;
+    line-height: 23px;
+    width: 500px;
+}
+
+#introduce img.user-img {
+    width: 139px;
+    height: 139px;
+    border-radius: 70px;
+    margin-bottom: 9px;
+}
+
+#introduce #name {
+    font-family: HiraKakuProN-W3;
+    font-size: 24px;
+    color: #474747;
+    letter-spacing: 0.2px;
+    text-align: center;
+    margin-bottom: 0px;
+}
+
+#introduce #other-info {
+    font-size: 12px;
+    color: #474747;
+    letter-spacing: 0.1px;
+    text-align: center;
+    margin-bottom: 27px;
+}
+
+#introduce #touch {
+    background: #F08A96;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #FFFFFF;
+    letter-spacing: 0.1px;
+    text-align: center;
+}
+
+
+/* 以下qualification部分*/
+
+#qualification {
+    padding-top: 38px;
+    display: flex;
+    flex-direction: row;
+    /*    align-items: center;*/
+    justify-content: flex-start;
+    border-bottom: 1px solid #CFCDCD;
+}
+
+#qualification .secondItem {
+    color: #35A5A1;
+}
+
+
+/*
+#qualification .left-container {
+flex-grow: 1;
+}
+
+#qualification .right-container {
+flex-grow: 4;
+}
+
+#qualification .right-container .firstItem {
+flex-grow: 2;
+}
+
+#qualification .right-container .secondItem {
+flex-grow: 10;
+color: #35A5A1;
+}
+*/
+
+
+/* 以下service-content部分*/
+
+#service-content {
+    padding-top: 38px;
+    display: flex;
+    flex-direction: row;
+    /*    align-items: center;*/
+    justify-content: flex-start;
+    border-bottom: 1px solid #CFCDCD;
+}
+
+
+/*
+#service-content .left-container {
+flex-grow: 1;
+}
+
+#service-content .right-container {
+flex-grow: 4;
+}
+
+#service-content .right-container .firstItem {
+flex-grow: 2;
+}
+
+#service-content .right-container .secondItem {
+flex-grow: 10;
+}
+*/
+
+
+/* 以下review部分*/
+
+#review {
+    padding-top: 38px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+#review .post {
+    display: flex;
+    flex-direction: row;
+    margin-top: 38px;
+}
+
+#review .post:not(.last-post) .firstItem {
+    border-bottom: 1px solid #CFCDCD;
+}
+
+#review .post .last-post {
+    padding-bottom: 100px;
+}
+
+#review .poster {
+    text-align: center;
+    width: 221px;
+}
+
+#review .firstItem {
+    /*    width: 500px;*/
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 42px;
+}
+
+#review .review-content {
+    font-size: 15px;
+    color: #4A4A4A;
+    letter-spacing: 0.12px;
+    margin-bottom: 6px;
+}
+
+#review .review-option {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#review .review-date {
+    color: #828992;
+    letter-spacing: 0.11px;
+}
+
+#review .more-btn {
+    color: #38A39F;
+    letter-spacing: 0.11px;
+}
+
+#review img.small-user-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
+}
+
+#review .small-name {
+    font-size: 16px;
+    color: #4A4A4A;
+    letter-spacing: 0.13px;
+}
+
+#review .space {
+    width: 50px;
+}
+
+
+/* 以下footer部分 */
+
+.footer {
+    background-color: #46CDC8;
+    clear: both;
+    /*    bottom: 0;*/
+    /*    height: 61px;*/
+    /*    position: absolute;*/
+    height: 61px;
+    margin-top: 36px;
+}
+
+.footer-item {
+    width: 33%;
+    float: left;
+    text-align: center;
+}
+
+.footer-item h3,
+.footer-item p,
+.footer-item a {
+    color: #fff;
+}
+
+.copyright {
+    display: block;
+    padding: 20px;
+    background-color: #46CDC8;
+    color: #fff;
+    clear: both;
+    text-align: center;
+}
+#js-link {
+    display: block;
+    line-height: 25px;
+}
+.HelperList {
+    display: none
+}

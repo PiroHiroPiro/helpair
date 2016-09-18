@@ -22,10 +22,12 @@ export interface MassageData {
     id: number;
     user: UserData;
     massage: string;
+    date?: number;
 }
 export interface lastLogsData {
     user: UserData;
-    lastLog: MassageData
+    lastLog: MassageData;
+    notCheck: number;
 }
 export interface ChatData {
     userId?: number;
